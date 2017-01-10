@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour {
             }
         }else
         {
-            if (transform.position.y < 0.51)
+            if (transform.position.y < 0.51 && Time.timeScale == 1)
             {
                 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
                 if (rbody.velocity.magnitude < maxSpeed)
