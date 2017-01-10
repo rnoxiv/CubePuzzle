@@ -41,7 +41,6 @@ public class MainCameraMove : MonoBehaviour {
             float difRotation = Mathf.Abs(views[nextView].transform.eulerAngles.y - transform.eulerAngles.y);
             if(transform.eulerAngles.y > views[nextView].transform.eulerAngles.y)
                 difRotation = 360 - Mathf.Abs(views[nextView].transform.eulerAngles.y - transform.eulerAngles.y);
-            print(difRotation + " / " + transform.eulerAngles.y);
             rotationSpeed = speed * ((difRotation * Time.deltaTime) / (distNextPoint * Time.deltaTime));
         }
     }

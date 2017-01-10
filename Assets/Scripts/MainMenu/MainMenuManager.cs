@@ -50,6 +50,11 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("Level1");
     }
 
+    public void loadGame()
+    {
+        SceneManager.LoadScene(PlayerPrefs.GetInt("LevelCompleted"));
+    }
+
     public void ExitGame()
     {
         Application.Quit();

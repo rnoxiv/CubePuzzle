@@ -1,100 +1,64 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-    GameObject[] pauseObjects;
-    GameObject[] optionsObjects;
-    public static int currentScore;
-    public static int highScore;
-
-    public static int currentLevel = 1;
-    public static int unlockedLevel;
-
+    private static int sceneIndex;
+    private static bool finished;
     private void Start()
     {
-        Time.timeScale = 1;
-        pauseObjects = GameObject.FindGameObjectsWithTag("showOnPaused");
-        optionsObjects = GameObject.FindGameObjectsWithTag("showOnOptions");
-        hidePaused();
-        //DontDestroyOnLoad(gameObject);
+        finished = false;
+        sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        DontDestroyOnLoad(gameObject);
     }
 
-    void Update()
+    public static void CompletedLevel(float finishedTime)
     {
-
-        //uses the p button to pause and unpause the game
-        if (Input.GetKeyDown(KeyCode.P))
+        finished = true;
+        if (Time.time >= finishedTime + 2)
         {
-            if (Time.timeScale == 1)
+            sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            sceneIndex++;
+            print(sceneIndex);
+            if (sceneIndex >= SceneManager.sceneCountInBuildSettings)
             {
-                Time.timeScale = 0;
-                showPaused();
+                print("You win!");
+                SceneManager.LoadScene("MainMenu");
             }
-            else if (Time.timeScale == 0)
+            else
             {
-                Debug.Log("high");
-                Time.timeScale = 1;
-                hidePaused();
+                PlayerPrefs.SetInt("LevelCompleted", sceneIndex);
+                SceneManager.LoadScene(sceneIndex);
             }
         }
+            
     }
 
-    public static void CompletedLevel()
+    public static bool getFinishedLevel()
     {
-        currentLevel++;
-        if (currentLevel == SceneManager.sceneCountInBuildSettings)
-            print("You win!");
-        else
-            SceneManager.LoadScene(currentLevel);
+        return finished;
     }
 
-    public void pauseControl()
+    public static void newLevel()
     {
-        if (Time.timeScale == 1)
-        {
-            Time.timeScale = 0;
-            showPaused();
-        }
-        else if (Time.timeScale == 0)
-        {
-            Time.timeScale = 1;
-            hidePaused();
-        }
-    }
-
-    //shows objects with ShowOnPause tag
-    public void showPaused()
-    {
-        foreach (GameObject g in pauseObjects)
-        {
-            g.SetActive(true);
-        }
-    }
-
-    //hides objects with ShowOnPause tag
-    public void hidePaused()
-    {
-        foreach (GameObject g in pauseObjects)
-        {
-            g.SetActive(false);
-        }
+        finished = false;
     }
 
     //loads inputted level
-    public void LoadLevel(string level)
+    public static void LoadLevel(string level)
     {
         SceneManager.LoadScene(level);
     }
 
-    public void Reload()
+    public static void Reload()
     {
-        SceneManager.LoadScene(currentLevel);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void SaveAndExit()
+    public static void SaveAndExit()
     {
         Application.Quit();
     }

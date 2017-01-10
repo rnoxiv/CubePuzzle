@@ -27,12 +27,8 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (finishedLevel)
-        {
-            if (Time.time >= finishedTime + 2)
-            {
-                GameManager.CompletedLevel();
-            }
-        }else
+            GameManager.CompletedLevel(finishedTime);
+        else
         {
             if (transform.position.y < 0.51 && Time.timeScale == 1)
             {
